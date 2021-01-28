@@ -42,6 +42,7 @@ class Pedastep:
         rhymeSize = len(rhyme)
         encrypted = re.sub('.{2}' + rhyme, '', encrypted)
         encryptedSize = len(encrypted)
+        eomSize = len(self._endOfMessageSeq)
         i = 0
         while i < encryptedSize:
             skipCount = metre[textIndex % metreSize]
@@ -53,9 +54,11 @@ class Pedastep:
             letterIndex = (encryptedLetterIndex - keyValue) % self._alphaSize
             letter = self._alpha[letterIndex]
             text += letter
+            if text[-eomSize:] == self._endOfMessageSeq:
+                text = text[:-eomSize]
+                break
             i += 1
             textIndex += 1
-            text = re.sub(self._endOfMessageSeq + '.*', '', text)        
         return text
 
     def _clean_non_alpha_chars(self, text):
