@@ -2,27 +2,29 @@
 
 import json
 import os.path as path
+import re
 import string
 
 class Pedastep:
     def __init__(self):
         self._alpha = 'ءابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی'
+        self._alphaSize = len(self._alpha)
+        self._letterIndex = dict(
+            (self._alpha[i], i) for i in range(len(self._alpha)) )
+        self._endOfMessageSeq = 'پپپپ'
 
     def encrypt(self, metre, rhyme, text):
-        text = self._clean_non_alpha_chars(text)
+        text = self._clean_non_alpha_chars(text) + self._endOfMessageSeq
         rhyme = self._clean_non_alpha_chars(rhyme)
-        letterIndex = dict(
-            (self._alpha[i], i) for i in range(len(self._alpha)) )
-        
-        alphaSize = len(self._alpha)
         metreSize = len(metre)
         rhymeSize = len(rhyme)
         encrypted = ','.join([str(i) for i in metre]) + '\n'
         for i in range(len(text)):
             skipCount = metre[i % metreSize]
-            keyValue = letterIndex[rhyme[i % rhymeSize]]
-            letterValue = letterIndex[text[i]]
-            encryptedLetter = self._alpha[(keyValue + letterValue) % alphaSize]
+            keyValue = self._letterIndex[rhyme[i % rhymeSize]]
+            letterIndex = self._letterIndex[text[i]]
+            encryptedLetterIndex = (keyValue + letterIndex) % self._alphaSize
+            encryptedLetter = self._alpha[encryptedLetterIndex]
             for j in range(skipCount):
                 encrypted += ' ,'
             encrypted += encryptedLetter
@@ -31,8 +33,30 @@ class Pedastep:
         encrypted.strip(', ')
         return encrypted
 
-    def decrypt(self, metre, rhyme, text):
-        return ''
+    def decrypt(self, metre, rhyme, encrypted):
+        encrypted = self._clean_non_alpha_chars(encrypted)
+        rhyme = self._clean_non_alpha_chars(rhyme)
+        text = ''
+        textIndex = 0
+        metreSize = len(metre)
+        rhymeSize = len(rhyme)
+        encrypted = re.sub('.{2}' + rhyme, '', encrypted)
+        encryptedSize = len(encrypted)
+        i = 0
+        while i < encryptedSize:
+            skipCount = metre[textIndex % metreSize]
+            i += skipCount
+            if i >= encryptedSize:
+                break
+            keyValue = self._letterIndex[rhyme[textIndex % rhymeSize]]
+            encryptedLetterIndex = self._letterIndex[encrypted[i]]
+            letterIndex = (encryptedLetterIndex - keyValue) % self._alphaSize
+            letter = self._alpha[letterIndex]
+            text += letter
+            i += 1
+            textIndex += 1
+            text = re.sub(self._endOfMessageSeq + '.*', '', text)        
+        return text
 
     def _clean_non_alpha_chars(self, text):
         output = ''
@@ -60,7 +84,7 @@ class PedastepIO:
         with open(self._poemFilePath) as poemFile:
             poem = poemFile.read()
         decrypted = self._ped.decrypt(self._metre, self._rhyme, poem)
-        with open(self._clearTextFilePath) as clearTextFile:
+        with open(self._clearTextFilePath, 'w') as clearTextFile:
             clearTextFile.write(decrypted)
 
     def parse_metadata(self, metaDataFilePath):
