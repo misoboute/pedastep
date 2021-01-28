@@ -130,3 +130,9 @@ dmypy.json
 
 # Other
 *.ods#
+
+# Cleartext messages
+/clear
+
+# Intermediate CSV files
+/csv
