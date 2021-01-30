@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["decrypt", "metadata/001.json"]
+            "args": ["decrypt", "metadata/002.json"]
         }
     ]
 }
