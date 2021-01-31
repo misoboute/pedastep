@@ -3,5 +3,6 @@
     "rhyme" : "ات چرا",
     "clearTextFile" : "../clear/006.txt",
     "csvFile" : "../csv/006.csv",
-    "poemFile" : "../poem/006.txt"
+    "poemFile" : "../poem/006.txt",
+    "revision" : 2
 }

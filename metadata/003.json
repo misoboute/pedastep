@@ -3,5 +3,6 @@
     "rhyme" : "ید",
     "clearTextFile" : "../clear/003.txt",
     "csvFile" : "../csv/003.csv",
-    "poemFile" : "../poem/003.txt"
+    "poemFile" : "../poem/003.txt",
+    "revision" : 2
 }

@@ -3,5 +3,6 @@
     "rhyme" : "یزی نگرفت",
     "clearTextFile" : "../clear/005.txt",
     "csvFile" : "../csv/005.csv",
-    "poemFile" : "../poem/005.txt"
+    "poemFile" : "../poem/005.txt",
+    "revision" : 2
 }

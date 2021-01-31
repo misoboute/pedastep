@@ -13,7 +13,7 @@ class Pedastep:
             (self._alpha[i], i) for i in range(len(self._alpha)) )
         self._endOfMessageSeq = 'پپپپ'
 
-    def encrypt(self, metre, rhyme, text):
+    def encrypt(self, metre, rhyme, text, rev):
         text = self._clean_non_alpha_chars(text) + self._endOfMessageSeq
         rhyme = self._clean_non_alpha_chars(rhyme)
         metreSize = len(metre)
@@ -33,14 +33,15 @@ class Pedastep:
         encrypted.strip(', ')
         return encrypted
 
-    def decrypt(self, metre, rhyme, encrypted):
+    def decrypt(self, metre, rhyme, encrypted, rev):
         encrypted = self._clean_non_alpha_chars(encrypted)
         rhyme = self._clean_non_alpha_chars(rhyme)
         text = ''
         textIndex = 0
         metreSize = len(metre)
         rhymeSize = len(rhyme)
-        encrypted = re.sub('.{2}' + rhyme, '', encrypted)
+        rhymeRegex = ('.' if rev == 1 else '..') + rhyme
+        encrypted = re.sub(rhymeRegex, '', encrypted)
         encryptedSize = len(encrypted)
         eomSize = len(self._endOfMessageSeq)
         i = 0
@@ -79,14 +80,16 @@ class PedastepIO:
     def encrypt(self):
         with open(self._clearTextFilePath) as clearTextFile:
             clearText = clearTextFile.read()
-        csv = self._ped.encrypt(self._metre, self._rhyme, clearText)
+        csv = self._ped.encrypt(
+            self._metre, self._rhyme, clearText, self._revision)
         with open(self._csvFilePath, 'w') as csvFile:
             csvFile.write(csv)
 
     def decrypt(self):
         with open(self._poemFilePath) as poemFile:
             poem = poemFile.read()
-        decrypted = self._ped.decrypt(self._metre, self._rhyme, poem)
+        decrypted = self._ped.decrypt(
+            self._metre, self._rhyme, poem, self._revision)
         with open(self._clearTextFilePath, 'w') as clearTextFile:
             clearTextFile.write(decrypted)
 
@@ -104,6 +107,8 @@ class PedastepIO:
                 meta['poemFile'])
             self._metre = meta['metre']
             self._rhyme = meta['rhyme']
+            self._rhyme = meta['rhyme']
+            self._revision = meta['revision']
 
     def abs_path_rel_to_meta_data(self, p):
         if path.isabs(p):

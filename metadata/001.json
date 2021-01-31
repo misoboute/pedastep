@@ -3,5 +3,6 @@
     "rhyme" : "اد نشانی",
     "clearTextFile" : "../clear/001.txt",
     "csvFile" : "../csv/001.csv",
-    "poemFile" : "../poem/001.txt"
+    "poemFile" : "../poem/001.txt",
+    "revision" : 2
 }

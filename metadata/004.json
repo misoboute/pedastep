@@ -3,5 +3,6 @@
     "rhyme" : "انه را",
     "clearTextFile" : "../clear/004.txt",
     "csvFile" : "../csv/004.csv",
-    "poemFile" : "../poem/004.txt"
+    "poemFile" : "../poem/004.txt",
+    "revision" : 2
 }
