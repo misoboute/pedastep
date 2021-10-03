@@ -1,0 +1,8 @@
+{
+    "metre" : [ 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2 ],
+    "rhyme" : "ویی یافتم",
+    "clearTextFile" : "../clear/011.txt",
+    "csvFile" : "../csv/011.csv",
+    "poemFile" : "../poem/011.txt",
+    "revision" : 2
+}
